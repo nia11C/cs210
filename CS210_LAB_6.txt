@@ -1,0 +1,98 @@
+import java.util.*;
+public class baseConversion
+{
+    public static void main(String [] args)
+    {
+        Scanner sc = new Scanner (System.in);
+        int fromBase = sc.nextInt();
+        int toBase = sc.nextInt();
+        //int num1 = sc.nextInt();
+        //String num = Integer.toString(num1);
+        String num = sc.next();
+
+        System.out.println(converter(num, fromBase, toBase));
+    }
+
+    public static String converter(String num, int fromBase, int toBase)
+    {
+        //return Integer.toString(Integer.parseInt(num,fromBase),toBase);
+        int total = 0;
+        int y = 0;
+        String s = "";
+        int a = 1;
+
+        if(fromBase != 10 && fromBase != 16)
+        {
+            for (int i = num.length() - 1; i >= 0; i--)        //Convert to Decimal Base:
+            {
+                if (i == num.length() - 1) {
+                    s = num.substring(i);
+                    y = Integer.parseInt(s);
+                    total = total + y;
+                } else {
+                    s = num.substring(i, i + 1);
+                    y = Integer.parseInt(s);
+                    total = (int) (total + (y * Math.pow(fromBase, a)));
+                    a++;
+                }
+            }
+        }
+
+        if(fromBase == 16)                                    //Change Hexidecimal to Decimal:
+        {
+            String digits = "0123456789ABCDEF";
+
+            total = 0;
+            int b = 0;
+
+            for(int i = num.length()-1; i >= 0; i--)
+            {
+                char c = num.charAt(i);
+                int q = digits.indexOf(c);
+                total = (int)Math.pow(16,b) * q + total;
+                b++;
+            }
+        }
+
+        if(fromBase == 10)                                  //If already in base decimal, keep as decimal:
+        {
+            total = Integer.parseInt(num);
+        }
+
+        if(toBase != 10 && toBase != 16)                   //Convert to the wanted base:
+        {
+            int i = 0;
+            String s1 = "";
+            while(total > 0)
+            {
+                i = (total % toBase);
+                s1 = i + s1;
+                total = total / toBase;
+                i++;
+            }
+            return s1;
+        }
+
+        if(toBase == 16)                                    //Convert to hexadecimal base if this is wanted:
+        {
+            String digits1 = "0123456789ABCDEF";
+            String s2 = "";
+            int p = 0;
+
+            while(total > 0)
+            {
+                p = total % 16;
+                s2 = digits1.charAt(p) + s2;
+                total = total / 16;
+            }
+
+            return s2;
+        }
+
+        if(toBase == 10)                                        //If the wanted base is decimal just return the value we have already gotten
+        {                                                       //the value we previously got:
+            return Integer.toString(total);
+        }
+        return "";
+    }
+}

@@ -1,0 +1,219 @@
+import java.util.*;
+public class lab_12
+{
+    public static void main (String [] args)
+    {
+        Scanner sc = new Scanner (System.in);
+        int num1 = sc.nextInt();
+        int num2 = sc.nextInt();
+        int n = sc.nextInt();
+        sc.close();
+        int z = num2 - num1;
+        int [] myAr1 = new int[z+1];
+        int [] myAr2 = new int [z+1];
+
+        int j = 0;
+        for(int i = num1; i <= num2; i++)
+        {
+            int coll = 0;
+            myAr1[j] = collatz(i,coll);
+            myAr2[j] = i;
+            j++;
+        }
+
+        int tempA = 0;
+        int tempB = 0;                      //Bubble sort each word:
+
+        for(int f = 0;f<myAr1.length-1;f++)
+        {
+            for (int i = 0; i < myAr1.length - 1; i++) {
+                if (myAr1[i] > myAr1[i + 1]) {
+                    tempA = myAr1[i];
+                    tempB = myAr2[i];
+
+                    myAr1[i] = myAr1[i + 1];
+                    myAr2[i] = myAr2[i + 1];
+
+                    myAr1[i + 1] = tempA;
+                    myAr2[i + 1] = tempB;
+                }
+            }
+        }
+
+        /*for(int i = 0; i < myAr1.length; i++)
+        {
+            if(i > z)
+            {
+                break;
+            }
+            else
+            {
+                System.out.print(myAr1[i] + " ");
+            }
+        }
+
+        System.out.println();
+
+        for(int i = 0; i < myAr2.length; i++)
+        {
+            if(i > z)
+            {
+                break;
+            }
+            else
+            {
+                System.out.print(myAr2[i] + " ");
+            }
+        }
+
+        System.out.println();*/
+        System.out.println(myAr2[n-1]);
+    }
+
+    public static int collatz (int num, int coll)
+    {
+        if((num % 2 == 0) && (num != 1))
+        {
+            num = num / 2;
+            coll++;
+
+            return collatz(num, coll);
+        }
+        else if ((num % 2 != 0) && (num != 1))
+        {
+            num = ((num * 3) + 1);
+            coll++;
+
+            return collatz(num, coll);
+        }
+        if(num == 1)
+        {
+            return coll;
+        }
+        return 0;
+    }
+}
+
+
+
+
+
+
+
+
+
+import java.io.*;
+import java.util.*;
+import java.text.*;
+import java.math.*;
+import java.util.regex.*;
+
+public class Solution 
+{
+    static int [] theArray;
+    static int [] theArray2;
+    public static void main (String [] args)
+    {
+        Scanner sc = new Scanner (System.in);
+        int num1 = sc.nextInt();
+        int num2 = sc.nextInt();
+        int n = sc.nextInt();
+        sc.close();
+        int z = num2 - num1;
+        int [] myAr1 = new int[z+1];
+        theArray = new int [z+1];
+        int [] myAr2 = new int[z+1];
+        int [] workSpace = new int [z+1];
+        int [] workSpace2 = new int [z+1];
+
+        //Get the collatz digits:
+        int j = 0;
+        for(int i = num1; i <= num2; i++)
+        {
+            int coll = 0;
+            myAr1[j] = collatz(i,coll);
+            myAr2[j] = i;
+            j++;
+        }
+        theArray = myAr1;
+        theArray2 = myAr2;
+        recMergeSort(workSpace, workSpace2,0, myAr1.length-1);
+        System.out.println(myAr2[n-1]);
+        
+        System.out.println(Arrays.toString(theArray));
+        System.out.println(Arrays.toString(myAr2));
+    }
+
+    public static int collatz (int num, int coll)
+    {
+        if((num % 2 == 0) && (num != 1))
+        {
+            num = num / 2;
+            coll++;
+            return collatz(num, coll);
+        }
+        else if ((num % 2 != 0) && (num != 1))
+        {
+            num = ((num * 3) + 1);
+            coll++;
+            return collatz(num, coll);
+        }
+        if(num == 1)
+        {
+            return coll;
+        }
+        return 0;
+    }
+
+    static void recMergeSort(int [] workSpace, int [] workSpace2, int lowerBound, int upperBound)
+    {
+        if(lowerBound == upperBound)
+        {
+            return;
+        }
+        else
+        {
+            int mid = (lowerBound+upperBound) / 2;
+            recMergeSort(workSpace, workSpace2, lowerBound, mid);
+            recMergeSort(workSpace, workSpace2, mid+1, upperBound);
+            merge(workSpace, workSpace2, lowerBound, mid+1, upperBound);
+        }
+    }
+    
+    public static void merge(int [] workSpace, int[] workSpace2, int first,int second, int upperBound) 
+    {
+        int j = 0;
+        int lowerBound = first;
+        int mid = second - 1;
+        int n = upperBound-lowerBound+1;
+        
+        while(first <= mid && second <= upperBound)
+        {
+            if( theArray[first] < theArray[second] )
+            {
+                workSpace[j++] = theArray[first++];
+                workSpace2[j++] = theArray2[first++];
+            }
+            else
+            {
+                workSpace[j++] = theArray[second++];
+                workSpace2[j++] = theArray2[second++];
+            }
+        }
+        while(first <= mid)
+        {
+            workSpace[j++] = theArray[first++];
+            workSpace2[j++] = theArray2[first++];
+        }
+        while(second <= upperBound)
+        {
+            workSpace[j++] = theArray[second++];
+            workSpace2[j++] = theArray2[second++];
+        }
+        for(j=0; j<n; j++)
+        {
+            theArray[lowerBound+j] = workSpace[j];
+            theArray2[lowerBound+j] = workSpace2[j];
+        }
+    }
+}

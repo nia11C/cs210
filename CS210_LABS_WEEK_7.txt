@@ -1,0 +1,75 @@
+import java.util.*;
+public class scrabble
+{
+    public static void main (String [] args)
+    {
+        Scanner sc = new Scanner (System.in);
+        int n = sc.nextInt();
+
+        String [] myAr = new String [n];
+        int [] ar1 = new int [n];
+
+        for(int i = 0; i < n; i++)
+        {
+            myAr[i] = sc.next();            //Take in Strings:
+        }
+
+        for(int i = 0; i < n; i++)
+        {
+            String s = myAr[i];
+            ar1[i] = scrabbleMethod(s);     //Give each String their points:
+        }
+
+        int temp = 0;                      //Bubble sort each word:
+        String temp2;
+        for(int j = 0;j<ar1.length-1;j++)
+        {
+            for (int i = 0; i < ar1.length - 1; i++) {
+                if (ar1[i] > ar1[i + 1]) {
+                    temp = ar1[i];
+                    temp2 = myAr[i];
+
+                    ar1[i] = ar1[i + 1];
+                    myAr[i] = myAr[i + 1];
+
+                    ar1[i + 1] = temp;
+                    myAr[i + 1] = temp2;
+                }
+            }
+        }
+
+        String temp3;                           //Sort alphabetically if points are the same:
+        for(int i = 0;i<ar1.length;i++)
+        {
+            for(int j = i+1;j<ar1.length;j++)
+            {
+                if(ar1[i]==ar1[j])
+                {
+                    if(myAr[i].compareTo(myAr[j]) > 0)
+                    {
+                        temp3=myAr[i];
+                        myAr[i]=myAr[j];
+                        myAr[j]=temp3;
+                    }
+                }
+            }
+        }
+
+        for(int i = 0; i<myAr.length; i++)
+        {
+            System.out.println(myAr[i]);
+        }
+    }
+
+    public static int scrabbleMethod(String s1)
+    {
+        String alphabet = "abcdefghijklmnopqrstuvwxyz";
+        int [] numbers = {1, 3, 3, 2, 1, 4, 2, 4, 1, 8, 5, 1, 3, 1, 1, 3, 10, 1, 1, 1, 1, 4, 4, 8, 4, 10};
+        int total = 0;
+        for(int j = 0; j < s1.length(); j++)
+        {
+            total += numbers[alphabet.indexOf(s1.charAt(j))];
+        }
+        return total;
+    }
+}

@@ -1,0 +1,88 @@
+import java.util.*;
+public class lab_8
+{
+    private int maxSize; // size of stack array
+    private String[] stackArray;
+    private int top;
+
+    public lab_8 (int s)
+    {
+        maxSize = s;
+        stackArray = new String[maxSize];
+        top = -1;
+    }
+
+    public static void main(String[] args)
+    {
+        Scanner sc = new Scanner (System.in);
+        String [] input = new String [400];
+        int x = 0;
+
+        for(int i = 0; i < input.length; i++)
+        {
+            String s1 = sc.nextLine();
+            input[i] = s1;
+            x++;
+            if(s1.equals("Arrived"))
+            {
+                sc.close();
+                break;
+            }
+        }
+        String [] input1 = new String [x];
+        lab_8 myStack1 = new lab_8(input1.length);
+
+        for(int i = 0; i < input1.length; i++)
+        {
+            input1[i] = input[i];
+            myStack1.push(input1[i]);
+        }
+
+        while (!myStack1.isEmpty())
+        {
+             String s2 = myStack1.pop();
+             if(!s2.equals("Arrived") && !s2.equals("Go Back"))
+              {
+                System.out.println(s2);
+              }
+        }
+    }
+
+    public void push(String j)
+    {
+        if(j.equals("Go North"))
+        {
+            j = "Go South";
+        }
+        else if(j.equals("Go South"))
+        {
+            j = "Go North";
+        }
+
+        if(j.equals("Go West"))
+        {
+            j = "Go East";
+        }
+        else if(j.equals("Go East"))
+        {
+            j = "Go West";
+        }
+
+        if(j.equals("Go Back"))
+        {
+            pop();
+        }
+        top++;
+        stackArray[top] = j;
+    }
+
+    public String pop()
+    {
+        return stackArray[top--];
+    }
+
+    public boolean isEmpty()
+    {
+        return (top == -1);
+    }
+}
